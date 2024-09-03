@@ -103,7 +103,13 @@ If you see errors like `ERROR_INITIALIZATION_FAILED` or `GPU Crashed` or `ERROR_
 
 As of Zed v0.146.x we log the selected GPU driver and you should see `Using GPU: ...` in the Zed log (`~/.local/share/zed/logs/Zed.log`).
 
-If Zed is selecting your integrated GPU instead of your discrete GPU, you can fix this by exporting the environment variable `DRI_PRIME=1` before running Zed.
+If Zed is selecting your integrated GPU instead of your discrete GPU, you can fix this by exporting the environment variable `DRI_PRIME=1` before running Zed. 
+
+An upgrade in NVIDIA graphics drivers (e.g., 555 to 560) may cause this failure to launch, as evidenced by `zed --help` still working on the command line despite the failure to launch. 
+
+Gnome desktop app launching of the Zed icon under `/var/home/[user]/.local/share/applications` (substitute your home user directory name for `[user]`) can incorporate this fix by adding the same command under `[Desktop Entry]` for the "dev.zed.Zed.desktop" file, by adding the `env` prefix in the `Exec=` line as follows: 
+
+`Exec=env DRI_PRIME=1 /var/home/[user]/.local/zed.app/libexec/zed-editor %U.`
 
 If you are using Mesa, and want more control over which GPU is selected you can run `MESA_VK_DEVICE_SELECT=list zed --foreground` to get a list of available GPUs and then export `MESA_VK_DEVICE_SELECT=xxxx:yyyy` to choose a specific device.
 
